@@ -101,9 +101,10 @@ class Image
     }
 
     public function crop($x,$y,$width,$height){
-        $resource = imagecrop($this->getResource(), ['x' => $x, 'y' => $y, 'width' => $width, 'height' => $height]);
-        imagedestroy($this->getResource());
-        $this->setResource($resource);
+        $dst_image = imagecreate($width, $height);
+        imagesavealpha($dst_image, true);
+        imagecopyresampled($dst_image, $this->getResource(), 0, 0, $x, $y, $width, $height, $width, $height);
+        $this->setResource($dst_image);
         return $this;
     }
 
